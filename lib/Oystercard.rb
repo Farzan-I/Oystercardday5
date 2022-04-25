@@ -32,4 +32,6 @@ class Oystercard
     @in_use
     # was !in_use before (check commented out spec)
   end
+
+  # hello
 end
