@@ -69,6 +69,4 @@ describe Oystercard do
         expect { subject.touch_out }.to change{ subject.balance }.by(-1)
     end
 
-
-
 end
