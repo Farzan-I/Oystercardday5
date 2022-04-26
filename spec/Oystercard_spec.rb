@@ -3,6 +3,7 @@ require 'Oystercard'
 describe Oystercard do
 
     let(:entry_station) { double :entry_station }
+    let(:exit_station) { double :entry_station }
 
     it "checks oystercard has a balance" do
         oystercard = Oystercard.new
@@ -27,7 +28,7 @@ describe Oystercard do
 
     describe '#deduct' do
         it "deducts money from oystercard" do
-            expect{ subject.touch_out }.to change{ subject.balance }.by(-1)
+            expect{ subject.touch_out(:exit_station)}.to change{ subject.balance }.by(-1)
         end
     end
     
@@ -57,7 +58,7 @@ describe Oystercard do
         subject.balance
         subject.top_up(1)
         subject.touch_in(:entry_station)
-        expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
+        expect{ subject.touch_out(:exit_station)}.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
     end
 
     it "oystercard balance is insufficient and can't touch in" do
@@ -66,7 +67,15 @@ describe Oystercard do
     end
 
     it "Charges the oystercard on touch out" do
-        expect { subject.touch_out }.to change{ subject.balance }.by(-1)
+        expect { subject.touch_out(:exit_station) }.to change{ subject.balance }.by(-1)
     end
+
+    it "Expect oystercard that's been touched out to return exit station" do
+        expect(subject).to respond_to(:touch_out).with(1).argument
+    end
+
+    # it "Remember the list of previous journeys"
+
+    # end
 
 end
