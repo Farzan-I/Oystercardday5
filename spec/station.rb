@@ -1,16 +1,16 @@
 require 'station'
 
 describe Station do
+
+  subject {decribed_class.new(name: "Southwark", zone: 1)}
   
 
-  it "Check the name of the station" do
-    station = Station.new
-    expect(subject.name).to eq(name)
+  it "Show the name of the current station" do
+    expect(subject.name).to eq("Southwark")
   end
 
-  it "Shows the zones that the oystercard has been used in" do
-
-    expect(subject.zone).to eq(zone)
+  it "Show the zone of the current station" do
+    expect(subject.zone).to eq(1)
   end
 
 end
