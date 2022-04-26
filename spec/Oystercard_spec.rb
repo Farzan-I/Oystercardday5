@@ -2,6 +2,8 @@ require 'Oystercard'
 
 describe Oystercard do
 
+    let(:entry_station) { double :entry_station }
+
     it "checks oystercard has a balance" do
         oystercard = Oystercard.new
         expect(subject.balance).to eq(0)
@@ -28,35 +30,45 @@ describe Oystercard do
             expect{ subject.touch_out }.to change{ subject.balance }.by(-1)
         end
     end
-
-    it "is initially not in a journey" do
-        expect(subject).not_to be_in_journey
-    end
     
     it "checks oyster card is in journey" do
-        expect(subject).not_to be_in_journey
+
+        subject.top_up(1)
+        subject.touch_in(:entry_station)
+        expect(subject.in_journey?).to eq true
     end
 
     it "checks oystercard is touched in" do
         subject.balance
         subject.top_up(1)
-        expect(subject.touch_in).to eq(true)
+        subject.touch_in(:entry_station)
+        expect(subject.in_journey?).to eq(true)
+    end
+
+    it "expects the card to remember the entry station after touch in" do
+        
+        subject.top_up(1)
+        subject.touch_in("olympia")
+        expect(subject.entry_station).to eq "olympia"
+
     end
 
     it "checks oystercard is touched out" do
         subject.balance
         subject.top_up(1)
-        subject.touch_in
+        subject.touch_in(:entry_station)
         expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
     end
 
     it "oystercard balance is insufficient and can't touch in" do
         subject.balance < 1
-        expect{ subject.touch_in }.to raise_error "Insufficient funds"
+        expect{ subject.touch_in(:entry_station) }.to raise_error "Insufficient funds"
     end
 
     it "Charges the oystercard on touch out" do
         expect { subject.touch_out }.to change{ subject.balance }.by(-1)
     end
+
+
 
 end
