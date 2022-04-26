@@ -75,7 +75,21 @@ describe Oystercard do
     end
 
     # it "Remember the list of previous journeys"
+    it "Checks that list_of_journeys saves the entry and exit stations" do
+        
+        subject.top_up(1)
+        subject.touch_in("Hammersmith")
+        subject.touch_out("Bank")
+        expect(subject.list_of_journeys).to include("Journey:" => "Hammersmith -> Bank")
+    end
 
+    it "Check that only one journey is added to list_of_journeys when a journey is completed" do
+        
+        subject.top_up(1)
+        subject.touch_in("Hammersmith")
+        subject.touch_out("Bank")
+        expect((subject.list_of_journeys).count).to eq 1
+    end
     # end
 
 end
