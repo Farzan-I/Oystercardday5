@@ -1,6 +1,7 @@
 class Oystercard
 
   MAXIMUM_BALANCE = 90
+  MINIMUM_CHARGE = 1
 
   attr_reader :balance
   attr_accessor :in_use
@@ -10,28 +11,29 @@ class Oystercard
   end
 
   def top_up(amount)
-    fail 'Maximum balance is exceeded (£90)' if amount + balance > MAXIMUM_BALANCE
-    @balance = @balance + amount
-  end
-
-  def deduct(amount)
-    @balance = @balance - amount  
+    fail "Maximum balance of #{MAXIMUM_BALANCE} exceeded" if amount + balance > MAXIMUM_BALANCE
+    @balance += amount
   end
 
   def in_journey?
     @in_use = false
-    # was true before (check commented out spec)
   end
-
+  
   def touch_in
-   !@in_use
-   # was in_use before (check commented out spec)
+    fail 'Insufficient funds' if balance < MINIMUM_CHARGE
+    !@in_use
   end
-
+  
   def touch_out
-    @in_use
-    # was !in_use before (check commented out spec)
+    deduct(MINIMUM_CHARGE)
+    @in_journey = false
   end
 
-  # hello
+  private
+  
+  def deduct(amount)
+    @balance -= amount  
+  end
+
+
 end
