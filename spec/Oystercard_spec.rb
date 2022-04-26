@@ -2,8 +2,8 @@ require 'Oystercard'
 
 describe Oystercard do
 
-    let(:entry_station) { double :entry_station }
-    let(:exit_station) { double :entry_station }
+    let(:entry_station) { double :station }
+    let(:exit_station) { double :station }
 
     it "checks oystercard has a balance" do
         oystercard = Oystercard.new
@@ -74,9 +74,11 @@ describe Oystercard do
         expect(subject).to respond_to(:touch_out).with(1).argument
     end
 
-    # it "Remember the list of previous journeys"
+    it "Check the list_of_journeys to be empty" do
+        expect(subject.list_of_journeys).to be_empty
+    end
+
     it "Checks that list_of_journeys saves the entry and exit stations" do
-        
         subject.top_up(1)
         subject.touch_in("Hammersmith")
         subject.touch_out("Bank")
@@ -84,12 +86,13 @@ describe Oystercard do
     end
 
     it "Check that only one journey is added to list_of_journeys when a journey is completed" do
-        
         subject.top_up(1)
         subject.touch_in("Hammersmith")
         subject.touch_out("Bank")
         expect((subject.list_of_journeys).count).to eq 1
     end
-    # end
+
+    
+
 
 end
