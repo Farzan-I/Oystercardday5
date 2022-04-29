@@ -1,5 +1,3 @@
-
-
 class Journey
   attr_reader :travelled_from, :travelled_to, :complete
 
