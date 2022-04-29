@@ -1,7 +1,5 @@
 # Oystercard
 
-# Oystercard
-
 ### User Stories
 The user stories that have been completed have been striked through for the purpose of clarity.
 
