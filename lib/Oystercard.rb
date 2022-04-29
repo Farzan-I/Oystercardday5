@@ -1,44 +1,58 @@
-class Oystercard
-
-  MAXIMUM_BALANCE = 90
-  MINIMUM_CHARGE = 1
-
-  attr_reader :balance, :entry_station
-  attr_accessor :in_use, :list_of_journeys
+class OysterCard
+  attr_reader :balance, :journey_history
+  MAX_BALANCE = 90
+  MIN_FARE = 1
 
   def initialize
     @balance = 0
-    @entry_station = nil
-    @list_of_journeys = []
-  end
+    @in_use = false
+    @fare = MIN_FARE
+    @journey_history = []
+  end 
 
-  def top_up(amount)
-    fail "Maximum balance of #{MAXIMUM_BALANCE} exceeded" if amount + balance > MAXIMUM_BALANCE
-    @balance += amount
+  def top_up(money)
+    raise "Cannot exceed £#{MAX_BALANCE} balance" if max_balance_exceeded?(money)
+    @balance += money
   end
-
+  
   def in_journey?
-    if entry_station != nil
-      true
-    end
+    @in_use
+  end 
+
+  def touch_in(start_station)
+    raise 'Balance insufficient' if balance_insufficient?
+    @in_use = true
+    start_journey(start_station)
   end
-  
-  def touch_in(entry_station)
-    fail 'Insufficient funds' if balance < MINIMUM_CHARGE
-    @entry_station = entry_station
-  end
-  
-  def touch_out(exit_station)
-    deduct(MINIMUM_CHARGE)
-    @list_of_journeys << {"Journey:" => "#{@entry_station} -> #{exit_station}"}
-    @entry_station = nil
+
+  def touch_out(end_station)
+    deduct(fare)
+    end_journey(end_station)
+    @in_use = false
   end
 
   private
+
+  attr_reader :fare, :travelled_from
   
-  def deduct(amount)
-    @balance -= amount  
+  def start_journey(station)
+    @travelled_from = station
   end
 
+  def end_journey(station)
+    journey_history << {start_station: "#{@travelled_from}".to_sym, end_station: "#{station}".to_sym}
+  end
 
+  def max_balance_exceeded?(money)
+    balance + money > MAX_BALANCE
+  end
+
+  def balance_insufficient?
+    balance < MIN_FARE
+  end
+
+  def deduct(fare)
+    @balance -= fare
+  end
+  
 end
