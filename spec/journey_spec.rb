@@ -12,8 +12,6 @@ describe Journey do
     it "check that touching in would not complete the journey" do
       expect { subject.start(:test_start_station) }.not_to change(subject, :complete)
     end
-
-
   end
 
   describe "#finish" do
@@ -47,7 +45,6 @@ describe Journey do
             expect(subject.fare).to eq Journey::MIN_FARE
           end
       end
-
     end
     
     context "it only finishes a journey" do
@@ -55,21 +52,14 @@ describe Journey do
         it "checks that the journey without a start has a penalty fare" do
           expect(subject.fare).to eq Journey::PENALTY_FARE
         end
-    
     end
   end
-    
 end
 
 # TO DO:
 # make it work together with oystercard
-# 
-
 
 # DONE:
-# touch in, no touch out
-# touch in, touch out
+# touch in, no touch out --> penalty fare
+# touch in, touch out --> regular fare
 # no touch in, touch out --> penalty fare
-
-
-# Journey.fare ---> Give us the fare (£penalty or £normal)
